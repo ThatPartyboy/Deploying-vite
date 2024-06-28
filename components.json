@@ -6,13 +6,13 @@
   "tailwind": {
     "config": "tailwind.config.js",
     "css": "./src/index.css",
-    "baseColor": "neutral",
+    "baseColor": "gray",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
     "components": "@/components",
-    "utils": "/home/lib/utils",
+    "utils": "home/lib/utils",
     "ui": "@/components/ui/"
   }
 }
