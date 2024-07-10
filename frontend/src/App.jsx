@@ -5,43 +5,35 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 
-interface Donation {
-  title: string;
-  date: string;
-  type: DonationType;
-}
-
 const donationTypes = [
   { value: 'hygiene', label: 'Hygiene', color: 'bg-green-100 hover:bg-green-200 text-green-800' },
   { value: 'food', label: 'Food', color: 'bg-orange-100 hover:bg-orange-200 text-orange-800' },
   { value: 'clothing', label: 'Clothing', color: 'bg-blue-100 hover:bg-blue-200 text-blue-800' },
   { value: 'medical', label: 'Medical Supplies', color: 'bg-red-100 hover:bg-red-200 text-red-800' },
   { value: 'volunteer', label: 'Volunteer Time', color: 'bg-purple-100 hover:bg-purple-200 text-purple-800' },
-] as const;
-
-type DonationType = typeof donationTypes[number]['value'];
+];
 
 const months = [
   'January', 'February', 'March', 'April', 'May', 'June', 
   'July', 'August', 'September', 'October', 'November', 'December'
-] as const;
+];
 
-const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-const firstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+const firstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
 
-const Cal: React.FC = () => {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [donations, setDonations] = useState<Donation[]>([]);
-  const [showDonationModal, setShowDonationModal] = useState<boolean>(false);
-  const [showDateModal, setShowDateModal] = useState<boolean>(false);
-  const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
-  const [newDonation, setNewDonation] = useState<Donation>({
+const Cal = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [donations, setDonations] = useState([]);
+  const [showDonationModal, setShowDonationModal] = useState(false);
+  const [showDateModal, setShowDateModal] = useState(false);
+  const [selectedDonation, setSelectedDonation] = useState(null);
+  const [newDonation, setNewDonation] = useState({
     title: '',
     date: '',
     type: 'hygiene',
   });
-  const [selectedYear, setSelectedYear] = useState<number>(currentDate.getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState<number>(currentDate.getMonth());
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
 
   const renderCalendar = () => {
     const year = currentDate.getFullYear();
@@ -83,13 +75,13 @@ const Cal: React.FC = () => {
     return calendarDays;
   };
 
-  const handleSelectDay = (date: string) => {
+  const handleSelectDay = (date) => {
     setNewDonation({ title: '', date, type: 'hygiene' });
     setSelectedDonation(null);
     setShowDonationModal(true);
   };
 
-  const handleSelectDonation = (e: React.MouseEvent, donation: Donation) => {
+  const handleSelectDonation = (e, donation) => {
     e.stopPropagation();
     setSelectedDonation(donation);
     setNewDonation(donation);
@@ -121,12 +113,12 @@ const Cal: React.FC = () => {
     setShowDateModal(true);
   };
 
-  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleYearChange = (e) => {
     setSelectedYear(parseInt(e.target.value));
   };
 
-  const handleMonthChange = (value: string) => {
-    setSelectedMonth(months.indexOf(value as typeof months[number]));
+  const handleMonthChange = (value) => {
+    setSelectedMonth(months.indexOf(value));
   };
 
   const handleDateSubmit = () => {
@@ -181,7 +173,7 @@ const Cal: React.FC = () => {
             />
             <Select
               value={newDonation.type}
-              onValueChange={(value: DonationType) => setNewDonation({ ...newDonation, type: value })}
+              onValueChange={(value) => setNewDonation({ ...newDonation, type: value })}
             >
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select Donation Type" />
