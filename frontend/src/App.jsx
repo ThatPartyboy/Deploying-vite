@@ -1,21 +1,63 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 
 const donationTypes = [
-  { value: 'hygiene', label: 'Hygiene', color: 'bg-green-100 hover:bg-green-200 text-green-800' },
-  { value: 'food', label: 'Food', color: 'bg-orange-100 hover:bg-orange-200 text-orange-800' },
-  { value: 'clothing', label: 'Clothing', color: 'bg-blue-100 hover:bg-blue-200 text-blue-800' },
-  { value: 'medical', label: 'Medical Supplies', color: 'bg-red-100 hover:bg-red-200 text-red-800' },
-  { value: 'volunteer', label: 'Volunteer Time', color: 'bg-purple-100 hover:bg-purple-200 text-purple-800' },
+  {
+    value: "hygiene",
+    label: "Hygiene",
+    color: "bg-green-100 hover:bg-green-200 text-green-800",
+  },
+  {
+    value: "food",
+    label: "Food",
+    color: "bg-orange-100 hover:bg-orange-200 text-orange-800",
+  },
+  {
+    value: "clothing",
+    label: "Clothing",
+    color: "bg-blue-100 hover:bg-blue-200 text-blue-800",
+  },
+  {
+    value: "medical",
+    label: "Medical Supplies",
+    color: "bg-red-100 hover:bg-red-200 text-red-800",
+  },
+  {
+    value: "volunteer",
+    label: "Volunteer Time",
+    color: "bg-purple-100 hover:bg-purple-200 text-purple-800",
+  },
 ];
 
 const months = [
-  'January', 'February', 'March', 'April', 'May', 'June', 
-  'July', 'August', 'September', 'October', 'November', 'December'
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
@@ -28,9 +70,11 @@ const Cal = () => {
   const [showDateModal, setShowDateModal] = useState(false);
   const [selectedDonation, setSelectedDonation] = useState(null);
   const [newDonation, setNewDonation] = useState({
-    title: '',
-    date: '',
-    type: 'hygiene',
+    title: "",
+    date: "",
+    type: "hygiene",
+    amount: "",
+    note: "",
   });
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
@@ -47,20 +91,41 @@ const Cal = () => {
     }
 
     for (let day = 1; day <= days; day++) {
-      const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      const dayDonations = donations.filter((donation) => donation.date === date);
-      const isToday = new Date().toDateString() === new Date(date).toDateString();
+      const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      const dayDonations = donations.filter(
+        (donation) => donation.date === date
+      );
+      const isToday =
+        new Date().toDateString() === new Date(date).toDateString();
 
       calendarDays.push(
-        <Card key={day} className={`min-h-[120px] cursor-pointer hover:shadow-lg transition-shadow duration-200 ${isToday ? 'border-2 border-blue-500' : ''}`} onClick={() => handleSelectDay(date)}>
+        <Card
+          key={day}
+          className={`min-h-[120px] cursor-pointer hover:shadow-lg transition-shadow duration-200 ${
+            isToday ? "border-2 border-blue-500" : ""
+          }`}
+          onClick={() => handleSelectDay(date)}
+        >
           <CardContent className="p-2">
-            <div className={`font-bold text-right ${isToday ? 'text-blue-500' : 'text-gray-600'}`}>{day}</div>
+            <div
+              className={`font-bold text-right ${
+                isToday ? "text-blue-500" : "text-gray-600"
+              }`}
+            >
+              {day}
+            </div>
             {dayDonations.map((donation, index) => {
-              const donationType = donationTypes.find(t => t.value === donation.type);
+              const donationType = donationTypes.find(
+                (t) => t.value === donation.type
+              );
               return (
-                <div 
-                  key={index} 
-                  className={`${donationType ? donationType.color : ''} p-2 mb-1 rounded-md text-sm cursor-pointer transition-colors duration-200 truncate`} 
+                <div
+                  key={index}
+                  className={`${
+                    donationType ? donationType.color : ""
+                  } p-2 mb-1 rounded-md text-sm cursor-pointer transition-colors duration-200 truncate`}
                   onClick={(e) => handleSelectDonation(e, donation)}
                 >
                   {donation.title}
@@ -76,7 +141,7 @@ const Cal = () => {
   };
 
   const handleSelectDay = (date) => {
-    setNewDonation({ title: '', date, type: 'hygiene' });
+    setNewDonation({ title: "", date, type: "hygiene" });
     setSelectedDonation(null);
     setShowDonationModal(true);
   };
@@ -102,7 +167,9 @@ const Cal = () => {
   };
 
   const handleDeleteDonation = () => {
-    const updatedDonations = donations.filter((donation) => donation !== selectedDonation);
+    const updatedDonations = donations.filter(
+      (donation) => donation !== selectedDonation
+    );
     setDonations(updatedDonations);
     setShowDonationModal(false);
   };
@@ -130,50 +197,83 @@ const Cal = () => {
     <div className="p-6 bg-gray-50 rounded-lg shadow-lg">
       <Card className="mb-6 bg-white">
         <CardContent className="flex justify-between items-center p-4">
-          <Button variant="outline" onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))}>
+          <Button
+            variant="outline"
+            onClick={() =>
+              setCurrentDate(
+                new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth() - 1,
+                  1
+                )
+              )
+            }
+          >
             Previous Month
           </Button>
-          <h2 
+          <h2
             className="text-2xl font-bold cursor-pointer hover:underline text-gray-800"
             onClick={handleDateClick}
           >
-            {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+            {currentDate.toLocaleString("default", {
+              month: "long",
+              year: "numeric",
+            })}
           </h2>
-          <Button variant="outline" onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))}>
+          <Button
+            variant="outline"
+            onClick={() =>
+              setCurrentDate(
+                new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth() + 1,
+                  1
+                )
+              )
+            }
+          >
             Next Month
           </Button>
         </CardContent>
-      </Card>      
+      </Card>
       <div className="grid grid-cols-7 gap-1 mb-2">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="font-bold text-center text-gray-600">{day}</div>
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <div key={day} className="font-bold text-center text-gray-600">
+            {day}
+          </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-4">
-        {renderCalendar()}
-      </div>
+      <div className="grid grid-cols-7 gap-4">{renderCalendar()}</div>
 
       <Dialog open={showDonationModal} onOpenChange={setShowDonationModal}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{selectedDonation ? 'Edit Donation' : 'Create Donation'}</DialogTitle>
+            <DialogTitle>
+              {selectedDonation ? "Edit Donation" : "Create Donation"}
+            </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <Input
               placeholder="Donation Title"
               value={newDonation.title}
-              onChange={(e) => setNewDonation({ ...newDonation, title: e.target.value })}
+              onChange={(e) =>
+                setNewDonation({ ...newDonation, title: e.target.value })
+              }
               className="col-span-3"
             />
             <Input
               type="date"
               value={newDonation.date}
-              onChange={(e) => setNewDonation({ ...newDonation, date: e.target.value })}
+              onChange={(e) =>
+                setNewDonation({ ...newDonation, date: e.target.value })
+              }
               className="col-span-3"
             />
             <Select
               value={newDonation.type}
-              onValueChange={(value) => setNewDonation({ ...newDonation, type: value })}
+              onValueChange={(value) =>
+                setNewDonation({ ...newDonation, type: value })
+              }
             >
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select Donation Type" />
@@ -186,12 +286,33 @@ const Cal = () => {
                 ))}
               </SelectContent>
             </Select>
+            <Input
+              placeholder="Amount"
+              type="number"
+              value={newDonation.amount}
+              onChange={(e) =>
+                setNewDonation({ ...newDonation, amount: e.target.value })
+              }
+              className="col-span-3"
+            />
+            <Input
+              placeholder="Note"
+              value={newDonation.note}
+              onChange={(e) =>
+                setNewDonation({ ...newDonation, note: e.target.value })
+              }
+              className="col-span-3"
+            />
           </div>
           <DialogFooter>
             {selectedDonation ? (
               <>
-                <Button variant="outline" onClick={handleUpdateDonation}>Update</Button>
-                <Button variant="destructive" onClick={handleDeleteDonation}>Delete</Button>
+                <Button variant="outline" onClick={handleUpdateDonation}>
+                  Update
+                </Button>
+                <Button variant="destructive" onClick={handleDeleteDonation}>
+                  Delete
+                </Button>
               </>
             ) : (
               <Button onClick={handleCreateDonation}>Create</Button>
@@ -206,7 +327,10 @@ const Cal = () => {
             <DialogTitle>Select Month and Year</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <Select value={months[selectedMonth]} onValueChange={handleMonthChange}>
+            <Select
+              value={months[selectedMonth]}
+              onValueChange={handleMonthChange}
+            >
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select Month" />
               </SelectTrigger>
