@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -60,6 +60,8 @@ const months = [
   "December",
 ];
 
+const api = "http://localhost:5001/api/donations";
+
 const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 const firstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
 
@@ -78,6 +80,15 @@ const Cal = () => {
   });
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
+
+  useEffect(() => {
+    fetch(api)
+      .then((response) => response.json())
+      .then((data) => setDonations(data))
+      .catch((error) => console.error("Error fetching donations:", error));
+  }, []);
+
+  console.log(donations);
 
   const renderCalendar = () => {
     const year = currentDate.getFullYear();
@@ -153,25 +164,73 @@ const Cal = () => {
     setShowDonationModal(true);
   };
 
+  const checkInputFIlled = () => {
+    if (!newDonation.title || !newDonation.date || !newDonation.amount) {
+      alert("Please fill out all required fields.");
+      return false;
+    }
+    return true;
+  };
+
   const handleCreateDonation = () => {
-    setDonations([...donations, newDonation]);
-    setShowDonationModal(false);
+    if (!checkInputFIlled()) return;
+
+    fetch(api, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newDonation),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setDonations([...donations, data]);
+        setShowDonationModal(false);
+      })
+      .catch((error) => {
+        console.error("Error creating donation:", error);
+      });
   };
 
   const handleUpdateDonation = () => {
-    const updatedDonations = donations.map((donation) =>
-      donation === selectedDonation ? newDonation : donation
-    );
-    setDonations(updatedDonations);
-    setShowDonationModal(false);
+    if (!checkInputFIlled()) return;
+    
+    fetch(`${api}/${selectedDonation._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newDonation),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        
+        const updatedDonations = donations.map((donation) =>
+          donation._id === selectedDonation._id ? data : donation
+        );
+        setDonations(updatedDonations);
+        setShowDonationModal(false);
+      })
+      .catch((error) => {
+        console.error("Error updating donation:", error);
+      });
   };
 
   const handleDeleteDonation = () => {
     const updatedDonations = donations.filter(
       (donation) => donation !== selectedDonation
     );
-    setDonations(updatedDonations);
-    setShowDonationModal(false);
+
+    fetch(`${api}/${selectedDonation._id}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        setDonations(updatedDonations);
+        setShowDonationModal(false);
+      })
+      .catch((error) => {
+        console.error("Error deleting donation:", error);
+      });
   };
 
   const handleDateClick = () => {
