@@ -1,76 +1,81 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind components;
+@tailwind utilities;
 
-  @layer base {
+@layer base {
     :root {
-      --background: 0 0% 100%;
-      --foreground: 224 71.4% 4.1%;
+        --background: 0 0% 98%; /* 稍微偏灰的白色 */
+        --foreground: 240 10% 10%; /* 更深的藍灰色 */
 
-      --card: 0 0% 100%;
-      --card-foreground: 224 71.4% 4.1%;
+        --card: 0 0% 95%; /* 卡片背景更暗一點 */
+        --card-foreground: 224 71.4% 4.1%;
 
-      --popover: 0 0% 100%;
-      --popover-foreground: 224 71.4% 4.1%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 224 71.4% 4.1%;
 
-      --primary: 220.9 39.3% 11%;
-      --primary-foreground: 210 20% 98%;
+        --primary: 260 50% 50%; /* 改為一種柔和的紫色 */
+        --primary-foreground: 0 0% 100%; /* 白色文字以確保可讀性 */
 
-      --secondary: 220 14.3% 95.9%;
-      --secondary-foreground: 220.9 39.3% 11%;
+        --secondary: 220 14.3% 95.9%;
+        --secondary-foreground: 220.9 39.3% 11%;
 
-      --muted: 220 14.3% 95.9%;
-      --muted-foreground: 220 8.9% 46.1%;
+        --muted: 220 14.3% 95.9%;
+        --muted-foreground: 220 8.9% 46.1%;
 
-      --accent: 220 14.3% 95.9%;
-      --accent-foreground: 220.9 39.3% 11%;
+        --accent: 120 54% 21%; /* 鮮亮的綠色 */
+        --accent-foreground: 0 0% 100%; /* 白色文字 */
 
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 210 20% 98%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 20% 98%;
 
-      --border: 220 13% 91%;
-      --input: 220 13% 91%;
-      --ring: 224 71.4% 4.1%;
+        --border: 220 13% 91%;
+        --input: 220 13% 91%;
+        --ring: 224 71.4% 4.1%;
 
-      --radius: 0.5rem;
+        --radius: 0.5rem;
     }
 
     .dark {
-      --background: 224 71.4% 4.1%;
-      --foreground: 210 20% 98%;
+        --background: 240 10% 10%; /* 更深的藍色調 */
+        --foreground: 0 0% 90%; /* 淺灰色 */
 
-      --card: 224 71.4% 4.1%;
-      --card-foreground: 210 20% 98%;
+        --card: 240 5% 15%; /* 更深的卡片背景 */
+        --card-foreground: 210 20% 98%;
 
-      --popover: 224 71.4% 4.1%;
-      --popover-foreground: 210 20% 98%;
+        --popover: 224 71.4% 4.1%;
+        --popover-foreground: 210 20% 98%;
 
-      --primary: 210 20% 98%;
-      --primary-foreground: 220.9 39.3% 11%;
+        --primary: 260 80% 80%; /* 暗模式下的亮紫色 */
+        --primary-foreground: 0 0% 10%; /* 非常深的背景讓文字可讀 */
 
-      --secondary: 215 27.9% 16.9%;
-      --secondary-foreground: 210 20% 98%;
+        --secondary: 215 27.9% 16.9%;
+        --secondary-foreground: 210 20% 98%;
 
-      --muted: 215 27.9% 16.9%;
-      --muted-foreground: 217.9 10.6% 64.9%;
+        --muted: 215 27.9% 16.9%;
+        --muted-foreground: 217.9 10.6% 64.9%;
 
-      --accent: 215 27.9% 16.9%;
-      --accent-foreground: 210 20% 98%;
+        --accent: 120 60% 70%; /* 暗模式下的淡綠色 */
+        --accent-foreground: 0 0% 5%; /* 接近黑色的背景 */
 
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 20% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 20% 98%;
 
-      --border: 215 27.9% 16.9%;
-      --input: 215 27.9% 16.9%;
-      --ring: 216 12.2% 83.9%;
-    }
-  }
-
-  @layer base {
-    * {
-      @apply border-border;
+        --border: 215 27.9% 16.9%;
+        --input: 215 27.9% 16.9%;
+        --ring: 216 12.2% 83.9%;
     }
     body {
-      @apply bg-background text-foreground;
+        background-color: var(--background);
+        transition: background-color 0.3s, color 0.3s;
     }
-  }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}
