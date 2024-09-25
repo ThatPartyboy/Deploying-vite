@@ -268,59 +268,62 @@ function App() {
     }))
 
     return (
-        <div className="p-6 container rounded-lg shadow-lg overflow-hidden h-screen" style={{paddingRight: '3rem'}}>
-            <EventSideNav events={events}/>
-            <Card className="mb-6">
-                <CardContent className="flex justify-between items-center p-4 text-muted-foreground">
-                    <Button
-                        variant="outline"
-                        onClick={() =>
-                            setCurrentDate(
-                                new Date(
-                                    currentDate.getFullYear(),
-                                    currentDate.getMonth() - 1,
-                                    1
-                                )
-                            )
-                        }
-                    >
-                        前一個月
-                    </Button>
-                    <h2
-                        className="text-2xl font-bold cursor-pointer hover:underline text-muted-foreground"
-                        onClick={handleDateClick}
-                    >
-                        {currentDate.toLocaleString("zh-TW", {
-                            month: "long",
-                            year: "numeric",
-                        })}
-                    </h2>
-                    <Button
-                        variant="outline"
-                        onClick={() =>
-                            setCurrentDate(
-                                new Date(
-                                    currentDate.getFullYear(),
-                                    currentDate.getMonth() + 1,
-                                    1
-                                )
-                            )
-                        }
-                    >
-                        下一個月
-                    </Button>
-                </CardContent>
-            </Card>
-            <div className="grid grid-cols-7 gap-1 mb-2">
-                {["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"].map((day) => (
-                    <div key={day} className="font-bold text-center text-muted-foreground">
-                        {day}
-                    </div>
-                ))}
+        <div className="container rounded-lg  overflow-hidden h-screen" style={{paddingRight: '3rem'}}>
+            <div
+                className="flex shrink-0 flex-row justify-end rounded-l-2xl mx-0 my-2 overflow-hidden right-0 bottom-0 relative justify-self-end pl-4">
+                <EventSideNav events={events}/>
             </div>
-
-            <div className="grid grid-cols-7 gap-4">{renderCalendar()}</div>
-
+            <div className="relative flex grow flex-col py-0 mx-6 my-2 rounded-2xl p-4 ">
+                <Card className="mb-6 shadow-sm">
+                    <CardContent className="flex justify-between items-center p-4 text-muted-foreground">
+                        <Button
+                            variant="outline"
+                            onClick={() =>
+                                setCurrentDate(
+                                    new Date(
+                                        currentDate.getFullYear(),
+                                        currentDate.getMonth() - 1,
+                                        1
+                                    )
+                                )
+                            }
+                        >
+                            前一個月
+                        </Button>
+                        <h2
+                            className="text-2xl font-bold cursor-pointer hover:underline text-muted-foreground"
+                            onClick={handleDateClick}
+                        >
+                            {currentDate.toLocaleString("zh-TW", {
+                                month: "long",
+                                year: "numeric",
+                            })}
+                        </h2>
+                        <Button
+                            variant="outline"
+                            onClick={() =>
+                                setCurrentDate(
+                                    new Date(
+                                        currentDate.getFullYear(),
+                                        currentDate.getMonth() + 1,
+                                        1
+                                    )
+                                )
+                            }
+                        >
+                            下一個月
+                        </Button>
+                    </CardContent>
+                </Card>
+                <div className="grid grid-cols-7 gap-1 mb-2">
+                    {["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"].map((day) => (
+                        <div key={day} className="font-bold text-center text-muted-foreground">
+                            {day}
+                        </div>
+                    ))}
+                </div>
+                <div className="grid grid-cols-7 gap-4">{renderCalendar()}</div>
+            </div>
             <Dialog open={showDonationModal} onOpenChange={setShowDonationModal}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
