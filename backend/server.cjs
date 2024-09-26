@@ -1,4 +1,5 @@
 // server.cjs
+require('dotenv').config();
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -6,7 +7,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
-const PORT = 5001;
+const PORT = process.env.PORT || 3000;
+const mongoURI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors());
@@ -14,7 +16,7 @@ app.use(bodyParser.json());
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/donations", {
+  .connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
