@@ -1,14 +1,24 @@
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,} from "@/components/ui/dialog";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select";
-import {Card, CardContent} from "@/components/ui/card";
-import React, {useEffect, useState} from 'react';
-import EventSideNav from '@/layout/EventSideNav'
-
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
+import EventSideNav from "@/layout/EventSideNav";
 
 const api = "http://localhost:5001/api/donations";
-
 
 const donationTypes = [
     {
@@ -44,7 +54,6 @@ type Donation = {
     note?: string;
 };
 
-
 const months = [
     "一月",
     "二月",
@@ -61,19 +70,42 @@ const months = [
 ];
 
 const times = [
-    "10:00-10:30", "10:30-11:00", "11:00-11:30", "11:30-12:00", "12:00-12:30", "12:30-13:00", "13:00-13:30",
-    "13:30-14:00", "14:00-14:30", "14:30-15:00", "15:00-15:30", "15:30-16:00",
-    "16:00-16:30", "16:30-17:00", "17:00-17:30", "17:30-18:00", "18:00-18:30", "18:30-19:00", "19:00-19:30",
-    "19:30-20:00", "20:00-20:30", "20:30-21:00", "21:00-21:30", "21:30-22:00"
+    "10:00-10:30",
+    "10:30-11:00",
+    "11:00-11:30",
+    "11:30-12:00",
+    "12:00-12:30",
+    "12:30-13:00",
+    "13:00-13:30",
+    "13:30-14:00",
+    "14:00-14:30",
+    "14:30-15:00",
+    "15:00-15:30",
+    "15:30-16:00",
+    "16:00-16:30",
+    "16:30-17:00",
+    "17:00-17:30",
+    "17:30-18:00",
+    "18:00-18:30",
+    "18:30-19:00",
+    "19:00-19:30",
+    "19:30-20:00",
+    "20:00-20:30",
+    "20:30-21:00",
+    "21:00-21:30",
+    "21:30-22:00",
 ];
 
-const TimeDropdown = ({selectedTime, setSelectedTime}: {
+const TimeDropdown = ({
+                          selectedTime,
+                          setSelectedTime,
+                      }: {
     selectedTime: string;
-    setSelectedTime: (time: string) => void
+    setSelectedTime: (time: string) => void;
 }) => (
     <Select value={selectedTime} onValueChange={setSelectedTime}>
         <SelectTrigger>
-            <SelectValue placeholder="選擇時間"/>
+            <SelectValue placeholder="選擇時間" />
         </SelectTrigger>
         <SelectContent>
             {times.map((time) => (
@@ -85,15 +117,19 @@ const TimeDropdown = ({selectedTime, setSelectedTime}: {
     </Select>
 );
 
-const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-const firstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+const daysInMonth = (year: number, month: number) =>
+    new Date(year, month + 1, 0).getDate();
+const firstDayOfMonth = (year: number, month: number) =>
+    new Date(year, month, 1).getDay();
 
 function App() {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [donations, setDonations] = useState([]);
+    const [donations, setDonations] = useState<Donation[]>([]);
     const [showDonationModal, setShowDonationModal] = useState(false);
     const [showDateModal, setShowDateModal] = useState(false);
-    const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
+    const [selectedDonation, setSelectedDonation] = useState<Donation | null>(
+        null,
+    );
     const [newDonation, setNewDonation] = useState<Donation>({
         title: "",
         phone: "",
@@ -126,8 +162,11 @@ function App() {
 
         for (let day = 1; day <= days; day++) {
             const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-            const dayDonations = donations.filter((donation) => donation.date === date);
-            const isToday = new Date().toDateString() === new Date(date).toDateString();
+            const dayDonations = donations.filter(
+                (donation: Donation) => donation.date === date,
+            );
+            const isToday =
+                new Date().toDateString() === new Date(date).toDateString();
 
             calendarDays.push(
                 <Card
@@ -137,11 +176,14 @@ function App() {
                 >
                     <CardContent className="p-2">
                         <div
-                            className={`font-bold text-right text-muted-foreground ${isToday ? "text-blue-500" : "text-gray-600"}`}>
+                            className={`font-bold text-right text-muted-foreground ${isToday ? "text-blue-500" : "text-gray-600"}`}
+                        >
                             {day}
                         </div>
-                        {dayDonations.map((donation, index) => {
-                            const donationType = donationTypes.find((t) => t.value === donation?.type);
+                        {dayDonations.map((donation: Donation, index) => {
+                            const donationType = donationTypes.find(
+                                (t) => t.value === donation.type,
+                            );
                             return (
                                 <div
                                     key={index}
@@ -153,7 +195,7 @@ function App() {
                             );
                         })}
                     </CardContent>
-                </Card>
+                </Card>,
             );
         }
 
@@ -161,12 +203,20 @@ function App() {
     };
 
     const handleSelectDay = (date: string) => {
-        setNewDonation({name: "", title: "", date, time: "", type: "hygiene", amount: "", note: ""});
+        setNewDonation({
+            name: "",
+            title: "",
+            date,
+            time: "",
+            type: "hygiene",
+            amount: "",
+            note: "",
+        });
         setSelectedDonation(null);
         setShowDonationModal(true);
     };
 
-    const handleSelectDonation = (e: React.MouseEvent, donation: never) => {
+    const handleSelectDonation = (e: React.MouseEvent, donation: Donation) => {
         e.stopPropagation();
         setSelectedDonation(donation);
         setNewDonation(donation);
@@ -192,18 +242,18 @@ function App() {
             body: JSON.stringify(newDonation),
         })
             .then((response) => response.json())
-            .then((data) => {
+            .then((data: Donation) => {
                 setDonations([...donations, data]);
                 setShowDonationModal(false);
             })
-            .catch((error) => {
+            .catch((error: Error) => {
                 console.error("Error creating donation:", error);
             });
     };
 
     const handleUpdateDonation = () => {
         if (!checkInputFilled()) return;
-
+        if (!selectedDonation) return; // 確保 selectedDonation 不為 null
         fetch(`${api}/${selectedDonation._id}`, {
             method: "PUT",
             headers: {
@@ -212,9 +262,9 @@ function App() {
             body: JSON.stringify(newDonation),
         })
             .then((response) => response.json())
-            .then((data) => {
-                const updatedDonations = donations.map((donation) =>
-                    donation._id === selectedDonation._id ? data : donation
+            .then((data: Donation) => {
+                const updatedDonations = donations.map((donation: Donation) =>
+                    donation._id === selectedDonation._id ? data : donation,
                 );
                 setDonations(updatedDonations);
                 setShowDonationModal(false);
@@ -225,11 +275,13 @@ function App() {
     };
 
     const handleDeleteDonation = () => {
+        if (!selectedDonation) return; // 確保 selectedDonation 不為 null
         const updatedDonations = donations.filter(
-            (donation) => donation !== selectedDonation
+            (donation) => donation !== selectedDonation,
         );
 
         fetch(`${api}/${selectedDonation._id}`, {
+            // 確保 selectedDonation 不為 null
             method: "DELETE",
         })
             .then(() => {
@@ -247,7 +299,7 @@ function App() {
         setShowDateModal(true);
     };
 
-    const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedYear(parseInt(e.target.value, 10));
     };
 
@@ -260,18 +312,20 @@ function App() {
         setShowDateModal(false);
     };
 
-    const events = donations.map(donation => ({
-        id: donation._id,
+    const events = donations.map((donation) => ({
+        id: donation._id || "", // 确保 id 不为 undefined
         title: donation.title,
         date: donation.date,
-        type: donation.type
-    }))
+        type: donation.type,
+    }));
 
     return (
-        <div className="container rounded-lg  overflow-hidden h-screen" style={{paddingRight: '3rem'}}>
-            <div
-                className="flex shrink-0 flex-row justify-end rounded-l-2xl mx-0 my-2 overflow-hidden right-0 bottom-0 relative justify-self-end pl-4">
-                <EventSideNav events={events}/>
+        <div
+            className="container rounded-lg  overflow-hidden h-screen"
+            style={{ paddingRight: "3rem" }}
+        >
+            <div className="flex shrink-0 flex-row justify-end rounded-l-2xl mx-0 my-2 overflow-hidden right-0 bottom-0 relative justify-self-end pl-4">
+                <EventSideNav events={events} />
             </div>
             <div className="relative flex grow flex-col py-0 mx-6 my-2 rounded-2xl p-4 ">
                 <Card className="mb-6 shadow-sm">
@@ -283,8 +337,8 @@ function App() {
                                     new Date(
                                         currentDate.getFullYear(),
                                         currentDate.getMonth() - 1,
-                                        1
-                                    )
+                                        1,
+                                    ),
                                 )
                             }
                         >
@@ -306,8 +360,8 @@ function App() {
                                     new Date(
                                         currentDate.getFullYear(),
                                         currentDate.getMonth() + 1,
-                                        1
-                                    )
+                                        1,
+                                    ),
                                 )
                             }
                         >
@@ -316,8 +370,19 @@ function App() {
                     </CardContent>
                 </Card>
                 <div className="grid grid-cols-7 gap-1 mb-2">
-                    {["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"].map((day) => (
-                        <div key={day} className="font-bold text-center text-muted-foreground">
+                    {[
+                        "星期日",
+                        "星期一",
+                        "星期二",
+                        "星期三",
+                        "星期四",
+                        "星期五",
+                        "星期六",
+                    ].map((day) => (
+                        <div
+                            key={day}
+                            className="font-bold text-center text-muted-foreground"
+                        >
                             {day}
                         </div>
                     ))}
@@ -336,7 +401,7 @@ function App() {
                             placeholder="你的稱呼"
                             value={newDonation.name}
                             onChange={(e) =>
-                                setNewDonation({...newDonation, name: e.target.value})
+                                setNewDonation({ ...newDonation, name: e.target.value })
                             }
                             className="col-span-3"
                             required
@@ -345,7 +410,7 @@ function App() {
                             placeholder="你的電話（我們會對訊息保密）"
                             value={newDonation.phone}
                             onChange={(e) =>
-                                setNewDonation({...newDonation, phone: e.target.value})
+                                setNewDonation({ ...newDonation, phone: e.target.value })
                             }
                             className="col-span-3"
                             required
@@ -354,7 +419,7 @@ function App() {
                             placeholder="你想捐什麽🤔"
                             value={newDonation.title}
                             onChange={(e) =>
-                                setNewDonation({...newDonation, title: e.target.value})
+                                setNewDonation({ ...newDonation, title: e.target.value })
                             }
                             className="col-span-3"
                             required
@@ -365,30 +430,27 @@ function App() {
                                     type="date"
                                     value={newDonation.date}
                                     onChange={(e) =>
-                                        setNewDonation({...newDonation, date: e.target.value})
+                                        setNewDonation({ ...newDonation, date: e.target.value })
                                     }
-                                    className="w-full"
                                     required
                                 />
                                 <TimeDropdown
-                                    selectedTime={newDonation.time}
+                                    selectedTime={newDonation.time || ""} // 確保 selectedTime 不為 undefined
                                     setSelectedTime={(time) => {
-                                        const updatedDonation = {...newDonation, time};
+                                        const updatedDonation = { ...newDonation, time };
                                         setNewDonation(updatedDonation);
                                     }}
-                                    className="w-full"
-                                    required
                                 />
                             </div>
                         </div>
                         <Select
                             value={newDonation.type}
                             onValueChange={(value) =>
-                                setNewDonation({...newDonation, type: value})
+                                setNewDonation({ ...newDonation, type: value })
                             }
                         >
                             <SelectTrigger className="col-span-3">
-                                <SelectValue placeholder="選擇種類"/>
+                                <SelectValue placeholder="選擇種類" />
                             </SelectTrigger>
                             <SelectContent>
                                 {donationTypes.map((type) => (
@@ -403,7 +465,7 @@ function App() {
                             type="number"
                             value={newDonation.amount}
                             onChange={(e) =>
-                                setNewDonation({...newDonation, amount: e.target.value})
+                                setNewDonation({ ...newDonation, amount: e.target.value })
                             }
                             className="col-span-3"
                         />
@@ -411,7 +473,7 @@ function App() {
                             placeholder="備註"
                             value={newDonation.note}
                             onChange={(e) =>
-                                setNewDonation({...newDonation, note: e.target.value})
+                                setNewDonation({ ...newDonation, note: e.target.value })
                             }
                             className="col-span-3"
                         />
@@ -427,7 +489,9 @@ function App() {
                                 </Button>
                             </>
                         ) : (
-                            <Button variant="destructive" onClick={handleCreateDonation}>新增</Button>
+                            <Button variant="destructive" onClick={handleCreateDonation}>
+                                新增
+                            </Button>
                         )}
                     </DialogFooter>
                 </DialogContent>
@@ -451,20 +515,22 @@ function App() {
                                 ))}
                             </SelectContent>
                             <SelectTrigger className="col-span-3">
-                                <SelectValue placeholder="Select Month"/>
+                                <SelectValue placeholder="Select Month" />
                             </SelectTrigger>
                         </Select>
                         <Input
                             type="number"
                             value={selectedYear.toString()}
-                            onChange={handleYearChange}
+                            onChange={(e) => handleYearChange(e)}
                             min={1900}
                             max={2100}
                             className="col-span-3"
                         />
                     </div>
                     <DialogFooter>
-                        <Button variant="destructive" onClick={handleDateSubmit}>確定</Button>
+                        <Button variant="destructive" onClick={handleDateSubmit}>
+                            確定
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
