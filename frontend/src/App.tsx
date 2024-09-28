@@ -18,7 +18,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import React, { useEffect, useState } from "react";
 import EventSideNav from "@/layout/EventSideNav";
 
-const api = "http://localhost:5001/api/donations";
+const api = "https://deploying-vite.onrender.com/api/donations";
 
 const donationTypes = [
     {
