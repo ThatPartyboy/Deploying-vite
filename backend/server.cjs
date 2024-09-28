@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const mongoURI = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors());
@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 // Connect to MongoDB
 mongoose
-  .connect(mongoURI, {
+  .connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
