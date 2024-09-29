@@ -18,7 +18,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import React, { useEffect, useState } from "react";
 import EventSideNav from "@/layout/EventSideNav";
 
-const api = process.env.API_URL || "http://localhost:3001/donations";
+const api = import.meta.env.VITE_API_URL;
+console.log(api);
 
 const donationTypes = [
     {
@@ -143,6 +144,7 @@ function App() {
     const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
 
     useEffect(() => {
+        if(!api) return;
         fetch(api)
             .then((response) => response.json())
             .then((data) => setDonations(data))
@@ -232,7 +234,7 @@ function App() {
     };
 
     const handleCreateDonation = () => {
-        if (!checkInputFilled()) return;
+        if (!checkInputFilled() || !api) return;
 
         fetch(api, {
             method: "POST",
